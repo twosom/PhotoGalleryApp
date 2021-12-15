@@ -11,7 +11,6 @@ import PhotosUI
 
 class ViewController: UIViewController {
 
-
     var fetchAssets: PHFetchResult<PHAsset>?
 
 
@@ -118,9 +117,8 @@ extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let photoCell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
-
-        if let phAsset: PHAsset = fetchAssets?[indexPath.row] {
-            photoCell.loadImage(phAsset: phAsset)
+        if let asset = fetchAssets?[indexPath.row] {
+            photoCell.loadImage(phAsset: asset)
         }
         return photoCell
     }
@@ -131,14 +129,13 @@ extension ViewController: PHPickerViewControllerDelegate {
 
     func picker(_ picker: PHPickerViewController,
                 didFinishPicking results: [PHPickerResult]) {
-        let identifierList: [String] = results.map {
+
+        let identifiers: [String] = results.map {
             $0.assetIdentifier ?? ""
         }
 
-        fetchAssets = PHAsset.fetchAssets(withLocalIdentifiers: identifierList, options: nil)
-
+        fetchAssets = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
         photoCollectionView.reloadData()
-
         dismiss(animated: true)
     }
 

@@ -5,7 +5,7 @@
 import UIKit
 import PhotosUI
 
-let scale = UIScreen.main.scale
+var scale = UIScreen.main.scale
 
 class PhotoCell: UICollectionViewCell {
 
@@ -16,13 +16,20 @@ class PhotoCell: UICollectionViewCell {
         }
     }
 
-    var imageManager: PHImageManager = PHImageManager()
+    var phImageManager = PHImageManager()
+
 
     var imageSize: CGSize = CGSize(width: 150 * scale, height: 150 * scale)
 
     func loadImage(phAsset: PHAsset) {
-        imageManager.requestImage(for: phAsset, targetSize: imageSize, contentMode: .aspectFit, options: nil) { image, info in
-            self.photoImageView.image = image
-        }
+        photoImageView.image = nil
+        phImageManager
+                .requestImage(for: phAsset,
+                        targetSize: imageSize,
+                        contentMode: .aspectFit,
+                        options: nil
+                ) { image, info in
+                    self.photoImageView.image = image
+                }
     }
 }
